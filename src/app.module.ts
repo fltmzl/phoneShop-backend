@@ -1,11 +1,26 @@
 import { Module } from '@nestjs/common';
+import { MongooseModule } from '@nestjs/mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { PrismaModule } from './prisma/prisma.module';
+import { UsersModule } from './users/user.module';
+import { ProductModule } from './product/product.module';
+import { CartModule } from './cart/cart.module';
+import { AuthModule } from './auth/auth.module';
+import { ConfigModule } from '@nestjs/config';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
-  imports: [UsersModule, PrismaModule],
+  imports: [
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+    MongooseModule.forRoot(process.env.DATABASE_URL),
+    UsersModule,
+    ProductModule,
+    CartModule,
+    AuthModule,
+    TransactionModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
