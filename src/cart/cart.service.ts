@@ -13,19 +13,29 @@ export class CartService {
     return await this.cartModel.create(createCartDto);
   }
 
-  findAll() {
-    return `This action returns all cart`;
+  async findAll(userId: string) {
+    return await this.cartModel.find({ user: userId });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} cart`;
+  async findOne(userId: string, id: string) {
+    return await this.cartModel.findOne({
+      $and: [{ user: userId }, { _id: id }],
+    });
   }
 
-  update(id: number, updateCartDto: UpdateCartDto) {
-    return `This action updates a #${id} cart`;
+  async update(userId: string, id: string, updateCartDto: UpdateCartDto) {
+    return await this.cartModel.findOneAndUpdate(
+      {
+        $and: [{ user: userId }, { _id: id }],
+      },
+      updateCartDto,
+      { new: true },
+    );
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} cart`;
+  async remove(userId: string, id: string) {
+    return this.cartModel.findOneAndDelete({
+      $and: [{ user: userId }, { _id: id }],
+    });
   }
 }

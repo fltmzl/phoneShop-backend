@@ -21,22 +21,26 @@ export class CartController {
   }
 
   @Get()
-  findAll() {
-    return this.cartService.findAll();
+  findAll(@Param('userId') userId: string) {
+    return this.cartService.findAll(userId);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.cartService.findOne(+id);
+  findOne(@Param('userId') userId: string, @Param('id') id: string) {
+    return this.cartService.findOne(userId, id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
+  update(
+    @Param('userId') userId: string,
+    @Param('id') id: string,
+    @Body() updateCartDto: UpdateCartDto,
+  ) {
+    return this.cartService.update(userId, id, updateCartDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.cartService.remove(+id);
+  remove(@Param('userId') userId: string, @Param('id') id: string) {
+    return this.cartService.remove(userId, id);
   }
 }
