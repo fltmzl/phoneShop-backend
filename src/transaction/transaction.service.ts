@@ -13,7 +13,13 @@ export class TransactionService {
   ) {}
 
   async create(createTransactionDto: CreateTransactionDto) {
-    return await this.transactionModel.create(createTransactionDto);
+    return await this.transactionModel.findOneAndUpdate(
+      {
+        order_id: createTransactionDto.order_id,
+      },
+      createTransactionDto,
+      { upsert: true, new: true },
+    );
   }
 
   findAll() {

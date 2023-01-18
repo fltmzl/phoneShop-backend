@@ -1,8 +1,7 @@
 import { IsMongoId, IsNumber } from 'class-validator';
 
 export class CreateCartDto {
-  @IsMongoId()
-  user: string;
+  user?: string;
 
   @IsMongoId()
   product: string;
