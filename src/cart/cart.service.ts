@@ -14,13 +14,13 @@ export class CartService {
   }
 
   async findAll(userId: string) {
-    return await this.cartModel.find({ user: userId });
+    return await this.cartModel.find({ user: userId }).populate("product");
   }
 
   async findOne(userId: string, id: string) {
     return await this.cartModel.findOne({
       $and: [{ user: userId }, { _id: id }],
-    });
+    }).populate("product");
   }
 
   async update(userId: string, id: string, updateCartDto: UpdateCartDto) {
