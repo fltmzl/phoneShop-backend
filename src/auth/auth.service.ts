@@ -55,6 +55,7 @@ export class AuthService {
     });
 
     return {
+      user: payload,
       accessToken,
     };
   }
