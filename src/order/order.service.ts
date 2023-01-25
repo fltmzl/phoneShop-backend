@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UserType } from 'typings';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { Order, OrderDocument } from './schemas/order.schema';
@@ -15,8 +16,17 @@ export class OrderService {
     return this.orderModel.create(createOrderDto);
   }
 
-  findAll() {
-    return `This action returns all order`;
+  findAll(user: UserType) {
+    if (user.role === 'admin') {
+      return this.orderModel.find().populate({
+        model: 'Product',
+        path: 'products.product',
+      });
+    }
+
+    return this.orderModel.find({
+      user: user._id,
+    });
   }
 
   findOne(id: number) {

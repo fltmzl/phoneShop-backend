@@ -20,6 +20,12 @@ export class AuthController {
   ) {}
 
   @UseGuards(JwtAuthGuard)
+  @Post('verifyToken')
+  getPayload(@Request() req) {
+    return req.user;
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('profile')
   getProfile(@Request() req) {
     return req.user;

@@ -35,8 +35,42 @@ export class Order {
   )
   products: Record<number, Product>;
 
+  @Prop()
+  // raw({
+  //   transaction_details: {
+  //     order_id: null,
+  //     gross_amount: calculateTotalOrder(carts),
+  //   },
+  //   credit_card: {
+  //     secure: true,
+  //   },
+  //   item_details,
+  //   customer_details: {
+  //     user_id: userId,
+  //     first_name: firstname,
+  //     last_name: lastname,
+  //     email: email,
+  //     phone: phone,
+  //     billing_address: {
+  //       first_name: firstname,
+  //       last_name: lastname,
+  //       email: email,
+  //       phone: phone,
+  //       address: address,
+  //     },
+  //     shipping_address: {
+  //       first_name: firstname,
+  //       last_name: lastname,
+  //       email: email,
+  //       phone: phone,
+  //       address: address,
+  //     },
+  //   },
+  // })
+  details: Record<string, any>;
+
   @Prop({ required: true })
-  totalPrice: Number;
+  token: string;
 }
 
 export const OrderSchema = SchemaFactory.createForClass(Order);

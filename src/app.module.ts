@@ -21,7 +21,7 @@ import { OrderModule } from './order/order.module';
     CartModule,
     AuthModule,
     TransactionModule,
-    OrderModule,
+    // OrderModule,
   ],
   controllers: [AppController],
   providers: [AppService],

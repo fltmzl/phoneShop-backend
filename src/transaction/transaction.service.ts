@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { UserType } from 'typings';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { UpdateTransactionDto } from './dto/update-transaction.dto';
 import { Transaction, TransactionDocument } from './schemas/transaction.schema';
@@ -12,29 +13,78 @@ export class TransactionService {
     private transactionModel: Model<TransactionDocument>,
   ) {}
 
+  // async create(createTransactionDto: CreateTransactionDto) {
+  //   return await this.transactionModel.findOneAndUpdate(
+  //     {
+  //       order: createTransactionDto.order,
+  //     },
+  //     createTransactionDto,
+  //     { upsert: true, new: true },
+  //   );
+  // }
+
   async create(createTransactionDto: CreateTransactionDto) {
-    return await this.transactionModel.findOneAndUpdate(
+    return await this.transactionModel.create(createTransactionDto);
+  }
+
+  findAll(user: UserType) {
+    if (user.role === 'admin') {
+      return this.transactionModel.find().populate('Order');
+    }
+
+    return this.transactionModel
+      .find({
+        _id: user._id,
+      })
+      .populate('Order');
+  }
+
+  findOne(user: UserType, id: string) {
+    return this.transactionModel.findById(id).populate('Order');
+  }
+
+  updateDetailsTransaction(updateTransactionDto: UpdateTransactionDto) {
+    return this.transactionModel.findOneAndUpdate(
       {
-        order_id: createTransactionDto.order_id,
+        'orderDetails.transaction_details.order_id':
+          updateTransactionDto.details.order_id,
       },
-      createTransactionDto,
-      { upsert: true, new: true },
+      updateTransactionDto,
+      {
+        new: true,
+      },
     );
   }
 
-  findAll() {
-    return `This action returns all transaction`;
+  update(
+    user: UserType,
+    id: string,
+    updateTransactionDto: UpdateTransactionDto,
+  ) {
+    if (user.role === 'admin') {
+      return this.transactionModel.findByIdAndUpdate(id, updateTransactionDto);
+    }
+
+    throw new HttpException(
+      {
+        statusCode: HttpStatus.FORBIDDEN,
+        error: "You're not allowed to update data",
+      },
+      HttpStatus.FORBIDDEN,
+    );
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} transaction`;
-  }
+  remove(user: UserType, id: string) {
+    if (user.role === 'admin') {
+      return this.transactionModel.findByIdAndDelete(id);
+    }
 
-  update(id: number, updateTransactionDto: UpdateTransactionDto) {
-    return `This action updates a #${id} transaction`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} transaction`;
+    throw new HttpException(
+      {
+        statusCode: HttpStatus.FORBIDDEN,
+        error: "You're not allowed to delete data",
+      },
+      HttpStatus.FORBIDDEN,
+    );
   }
 }

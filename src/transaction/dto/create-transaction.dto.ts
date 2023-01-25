@@ -1,8 +1,8 @@
 import { IsMongoId } from 'class-validator';
 
 export class CreateTransactionDto {
-  @IsMongoId()
-  order_id: string;
-
-  transactionDetails: any;
+  orderDetails: any;
+  token: string;
+  details: any;
+  // transactionDetails: any;
 }
