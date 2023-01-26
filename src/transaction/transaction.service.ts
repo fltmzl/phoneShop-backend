@@ -29,13 +29,12 @@ export class TransactionService {
 
   findAll(user: UserType) {
     if (user.role === 'admin') {
-      return this.transactionModel.find()
+      return this.transactionModel.find();
     }
 
-    return this.transactionModel
-      .find({
-        "orderDetails.customer_details.user_id": user._id,
-      })
+    return this.transactionModel.find({
+      'orderDetails.customer_details.user_id': user.id,
+    });
   }
 
   findOne(user: UserType, id: string) {

@@ -25,7 +25,7 @@ export class OrderService {
     }
 
     return this.orderModel.find({
-      user: user._id,
+      user: user.id,
     });
   }
 
