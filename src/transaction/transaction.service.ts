@@ -29,18 +29,17 @@ export class TransactionService {
 
   findAll(user: UserType) {
     if (user.role === 'admin') {
-      return this.transactionModel.find().populate('Order');
+      return this.transactionModel.find()
     }
 
     return this.transactionModel
       .find({
-        _id: user._id,
+        "orderDetails.customer_details.user_id": user._id,
       })
-      .populate('Order');
   }
 
   findOne(user: UserType, id: string) {
-    return this.transactionModel.findById(id).populate('Order');
+    return this.transactionModel.findById(id);
   }
 
   updateDetailsTransaction(updateTransactionDto: UpdateTransactionDto) {
