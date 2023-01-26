@@ -46,7 +46,6 @@ export class TransactionController {
     return this.transactionService.findAll(user);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get(':id')
   findOne(@Param('id') id: string, @Req() req) {
     const user: UserType = req.user;

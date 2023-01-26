@@ -38,7 +38,9 @@ export class TransactionService {
   }
 
   findOne(user: UserType, id: string) {
-    return this.transactionModel.findById(id);
+    return this.transactionModel.find({
+	"orderDetails.transaction_details.order_id": id,
+    });
   }
 
   updateDetailsTransaction(updateTransactionDto: UpdateTransactionDto) {
